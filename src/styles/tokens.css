@@ -1,0 +1,183 @@
+/*
+ * Single source of truth for colors, spacing and typography.
+ * Scenario-type colors (--type-*) and severity colors (--sev-*) are defined
+ * here for both themes; components only ever reference these variables.
+ */
+:root {
+  color-scheme: light;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --radius-sm: 5px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --sidebar-width: 252px;
+  --topbar-height: 52px;
+  --content-max: 1280px;
+  --reading-width: 78ch;
+
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
+  --shadow-md: 0 4px 12px rgb(16 24 40 / 0.1);
+  --shadow-lg: 0 12px 32px rgb(16 24 40 / 0.16);
+
+  --transition: 140ms ease;
+
+  --bg: #f5f6f8;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #edf0f3;
+  --bg-hover: #e7eaee;
+  --fg: #1b1f26;
+  --fg-muted: #5a6270;
+  --fg-faint: #8b929e;
+  --border: #dee2e7;
+  --border-strong: #c5cbd3;
+  --accent: #2456d6;
+  --accent-fg: #ffffff;
+  --accent-soft: #e3eaff;
+  --focus-ring: #2456d6;
+  --overlay: rgb(16 24 40 / 0.45);
+
+  --type-positive: #167a3c;
+  --type-positive-soft: #dcf5e4;
+  --type-positive-fg: #0f5a2b;
+  --type-negative: #c2500a;
+  --type-negative-soft: #ffe8d6;
+  --type-negative-fg: #8a3708;
+  --type-security: #6a2fd6;
+  --type-security-soft: #ece4ff;
+  --type-security-fg: #4a1f9c;
+  --type-error: #c11f4a;
+  --type-error-soft: #ffe1e8;
+  --type-error-fg: #8c1535;
+
+  --status-todo: #64748b;
+  --status-todo-soft: #eef2f6;
+  --status-todo-fg: #47536b;
+  --status-doing: #1d6ff2;
+  --status-doing-soft: #e2edff;
+  --status-doing-fg: #1552b8;
+  --status-fail: #c11f4a;
+  --status-fail-soft: #ffe1e8;
+  --status-fail-fg: #8c1535;
+  --status-pass: #167a3c;
+  --status-pass-soft: #dcf5e4;
+  --status-pass-fg: #0f5a2b;
+
+  --sev-critical: #b91c1c;
+  --sev-critical-soft: #fee2e2;
+  --sev-critical-fg: #7f1d1d;
+  --sev-high: #d9640c;
+  --sev-high-soft: #ffedd5;
+  --sev-high-fg: #8a3c05;
+  --sev-medium: #b8860b;
+  --sev-medium-soft: #fdf3c7;
+  --sev-medium-fg: #6b4a05;
+  --sev-low: #3b6fb6;
+  --sev-low-soft: #e0ecfb;
+  --sev-low-fg: #244a7c;
+  --sev-none: #6b7280;
+  --sev-none-soft: #eceff3;
+  --sev-none-fg: #374151;
+
+  --code-bg: #f0f2f5;
+  --code-fg: #1f2937;
+  --hl-comment: #6b7280;
+  --hl-keyword: #9d174d;
+  --hl-string: #166534;
+  --hl-number: #b45309;
+  --hl-attr: #1d4ed8;
+  --hl-title: #6d28d9;
+  --hl-meta: #0e7490;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0f1216;
+  --bg-elevated: #171b21;
+  --bg-subtle: #1d222a;
+  --bg-hover: #252b34;
+  --fg: #e7e9ec;
+  --fg-muted: #a3aab5;
+  --fg-faint: #717987;
+  --border: #2a303a;
+  --border-strong: #3b434f;
+  --accent: #7ea6ff;
+  --accent-fg: #0b1220;
+  --accent-soft: #1d2a48;
+  --focus-ring: #8fb3ff;
+  --overlay: rgb(0 0 0 / 0.6);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.6);
+
+  --type-positive: #4ade80;
+  --type-positive-soft: #10301c;
+  --type-positive-fg: #bbf7d0;
+  --type-negative: #fb923c;
+  --type-negative-soft: #3a1f0c;
+  --type-negative-fg: #fed7aa;
+  --type-security: #b195ff;
+  --type-security-soft: #2a1d4d;
+  --type-security-fg: #ddd6fe;
+  --type-error: #fb7195;
+  --type-error-soft: #3f1322;
+  --type-error-fg: #fecdd3;
+
+  --status-todo: #94a3b8;
+  --status-todo-soft: #232a35;
+  --status-todo-fg: #cbd5e1;
+  --status-doing: #60a5fa;
+  --status-doing-soft: #12233f;
+  --status-doing-fg: #bfdbfe;
+  --status-fail: #fb7195;
+  --status-fail-soft: #3f1322;
+  --status-fail-fg: #fecdd3;
+  --status-pass: #4ade80;
+  --status-pass-soft: #10301c;
+  --status-pass-fg: #bbf7d0;
+
+  --sev-critical: #f87171;
+  --sev-critical-soft: #3f1515;
+  --sev-critical-fg: #fecaca;
+  --sev-high: #fdba74;
+  --sev-high-soft: #3b230b;
+  --sev-high-fg: #fed7aa;
+  --sev-medium: #facc15;
+  --sev-medium-soft: #372c08;
+  --sev-medium-fg: #fef08a;
+  --sev-low: #93c5fd;
+  --sev-low-soft: #172a45;
+  --sev-low-fg: #bfdbfe;
+  --sev-none: #9ca3af;
+  --sev-none-soft: #262b33;
+  --sev-none-fg: #d1d5db;
+
+  --code-bg: #12161c;
+  --code-fg: #e5e7eb;
+  --hl-comment: #8b93a1;
+  --hl-keyword: #f472b6;
+  --hl-string: #86efac;
+  --hl-number: #fbbf24;
+  --hl-attr: #93c5fd;
+  --hl-title: #c4b5fd;
+  --hl-meta: #67e8f9;
+}

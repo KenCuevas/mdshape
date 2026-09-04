@@ -1,0 +1,268 @@
+/* Rendered markdown (`.md` container). */
+.md {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.md > :first-child {
+  margin-top: 0;
+}
+
+.md > :last-child {
+  margin-bottom: 0;
+}
+
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  margin: 1.6em 0 0.6em;
+  scroll-margin-top: calc(var(--topbar-height) + 16px);
+}
+
+.md h1 {
+  font-size: var(--text-xl);
+}
+
+.md h2 {
+  font-size: var(--text-lg);
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+}
+
+.md h3 {
+  font-size: var(--text-md);
+}
+
+.md h4 {
+  font-size: var(--text-base);
+}
+
+.md p,
+.md ul,
+.md ol,
+.md blockquote {
+  margin: 0 0 0.9em;
+}
+
+.md ul,
+.md ol {
+  padding-left: 1.4em;
+}
+
+.md li {
+  margin: 0.2em 0;
+}
+
+.md li > p {
+  margin-bottom: 0.3em;
+}
+
+.md blockquote {
+  padding: 0.4em 1em;
+  border-left: 3px solid var(--border-strong);
+  color: var(--fg-muted);
+  background: var(--bg-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.md hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1.6em 0;
+}
+
+.md code {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+
+.md pre.code-block {
+  position: relative;
+  margin: 0 0 1em;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+.md pre.code-block code {
+  display: block;
+  padding: 0;
+  background: none;
+  font-size: var(--text-sm);
+  white-space: pre;
+}
+
+.md pre.code-block[data-lang]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 6px;
+  right: 44px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-faint);
+}
+
+.md .copy-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--fg-muted);
+  opacity: 0.7;
+  transition: opacity var(--transition);
+}
+
+.md .copy-button:hover,
+.md .copy-button:focus-visible,
+.md pre.code-block:hover .copy-button {
+  opacity: 1;
+  color: var(--fg);
+}
+
+.md .copy-button[data-copied='true'] {
+  color: var(--type-positive);
+  border-color: var(--type-positive);
+  opacity: 1;
+}
+
+.md .table-wrap {
+  overflow-x: auto;
+  margin: 0 0 1em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 100%;
+}
+
+.md table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: max-content;
+  font-size: var(--text-sm);
+}
+
+.md th,
+.md td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.md th {
+  background: var(--bg-subtle);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.md tr:last-child td {
+  border-bottom: 0;
+}
+
+.md tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--bg-subtle) 45%, transparent);
+}
+
+.md img {
+  max-width: 100%;
+}
+
+.md a.ref-link {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.md a.ref-link:hover {
+  text-decoration: underline;
+}
+
+.md a.ref-link code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Compact variant used inside cards and the scenario drawer. */
+.md-compact p,
+.md-compact ul,
+.md-compact ol {
+  margin-bottom: 0.4em;
+}
+
+.md-compact pre.code-block {
+  margin: 0.4em 0;
+}
+
+/* highlight.js token colors, theme-aware. */
+.hljs {
+  color: var(--code-fg);
+}
+.hljs-comment,
+.hljs-quote {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+  color: var(--hl-keyword);
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-template-tag {
+  color: var(--hl-string);
+}
+.hljs-number,
+.hljs-literal,
+.hljs-deletion {
+  color: var(--hl-number);
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-property,
+.hljs-symbol,
+.hljs-bullet {
+  color: var(--hl-attr);
+}
+.hljs-title,
+.hljs-section,
+.hljs-type,
+.hljs-class,
+.hljs-function {
+  color: var(--hl-title);
+}
+.hljs-meta,
+.hljs-built_in,
+.hljs-link,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: var(--hl-meta);
+}
+.hljs-emphasis {
+  font-style: italic;
+}

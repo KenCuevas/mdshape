@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+package-lock.json
+src/content/
+reviews/
+src/parsers/__fixtures__/
