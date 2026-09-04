@@ -23,3 +23,7 @@ npm-debug.log*
 
 # Scratch workspace del flujo de subagentes (no forma parte del proyecto)
 .superpowers/
+
+# Copia generada por `npm run sync:docs` desde ./reviews (fuente unica de verdad).
+# Se reconstruye sola antes de cada dev y de cada build.
+src/content/reviews/

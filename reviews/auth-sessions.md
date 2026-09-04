@@ -25,6 +25,8 @@ no ha caducado. La renovacion no crea una fila nueva: reescribe la misma.
 
 ### REFRESH-P01 — Renovacion sobre la misma sesion
 
+- **Descripcion:** el caso normal: la renovacion reescribe la misma fila de sesion en
+  vez de crear una nueva, e invalida el token anterior.
 - **Precondiciones:** sesion abierta por la API.
 - **Request:** `POST /api/auth/refresh-token` con `{"refreshToken": "..."}`.
 - **Resultado esperado:** 200 con `message: "Token renovado"` y ambos tokens. El id de sesion
@@ -35,6 +37,8 @@ no ha caducado. La renovacion no crea una fila nueva: reescribe la misma.
 
 ### LOGOUT-P01 — Cierre de sesion
 
+- **Descripcion:** el cierre de sesion revoca la fila y tambien desactiva los tokens
+  push asociados, no solo el token de acceso.
 - **Precondiciones:** sesion abierta y un token push activo.
 - **Resultado esperado:** 200 `"Sesion cerrada correctamente"`. La sesion queda revocada, los
   tokens push del usuario quedan inactivos y el token de acceso pasa a responder 401
@@ -42,17 +46,23 @@ no ha caducado. La renovacion no crea una fila nueva: reescribe la misma.
 
 ### LOGOUT-ALL-P01 — Cierre en todos los dispositivos
 
+- **Descripcion:** cerrar todos los dispositivos incluye la propia sesion que hizo la
+  peticion, no solo las demas.
 - **Precondiciones:** dos sesiones del mismo usuario.
 - **Resultado esperado:** 200 y **ninguna** sesion activa, incluida la que hizo la peticion.
 
 ### SESSIONS-P01 — Listado de sesiones
 
+- **Descripcion:** el listado solo devuelve las sesiones propias, y confirma que el
+  campo `location` nunca llega a rellenarse.
 - **Precondiciones:** una sesion propia y una de otro usuario.
 - **Resultado esperado:** 200 con una sola entrada, con `ip`, `revoked: false` y `location:
   "Desconocido"` (ese campo nunca se rellena). Las de otros usuarios no aparecen.
 
 ### SESSIONS-P02 — Revocacion de una sesion propia
 
+- **Descripcion:** revocar la propia sesion invalida el token al instante, pero
+  intentarlo con el id de otro usuario responde 404 sin tocarla.
 - **Resultado esperado:** 200 `"Sesion revocada"` y el token correspondiente deja de valer al
   instante. Con el id de una sesion de otro usuario, 404 `"Sesion no encontrada"` y esa sesion
   intacta.
@@ -61,11 +71,15 @@ no ha caducado. La renovacion no crea una fila nueva: reescribe la misma.
 
 ### REFRESH-N01 — Token desconocido, revocado o caducado
 
+- **Descripcion:** cubre los tres motivos de rechazo del refresh token, cada uno con su
+  propio mensaje.
 - **Resultado esperado:** 401 en los tres casos, con `"Refresh token no encontrado"`,
   `"Refresh token revocado"` y `"Refresh token expirado"` respectivamente.
 
 ### REFRESH-N02 — Token de acceso en lugar del de refresco
 
+- **Descripcion:** usar el token de acceso donde va el de refresco se rechaza, igual
+  que dejar el campo vacio.
 - **Resultado esperado:** 401. Con el campo vacio, 400 y `details[0].field =
   "refreshToken"`.
 

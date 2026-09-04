@@ -23,6 +23,8 @@ usuario; el codigo de recuperacion comparte tabla y reglas con el de verificacio
 
 ### CHPWD-P01 — Cambio de contrasena
 
+- **Descripcion:** el caso normal de cambio de contrasena autenticado: revoca todas las
+  sesiones activas, incluida la que hizo la peticion, y envia el aviso de cambio.
 - **Precondiciones:** usuario autenticado con dos sesiones abiertas.
 - **Request:** `POST /api/auth/change-password` con la actual y la nueva.
 - **Resultado esperado:** 200 `"Contrasena actualizada"`. Ninguna sesion activa; el token que
@@ -31,15 +33,21 @@ usuario; el codigo de recuperacion comparte tabla y reglas con el de verificacio
 
 ### FORGOT-P01 — Solicitud de recuperacion
 
+- **Descripcion:** el caso normal: crea un codigo en `email_otps` y envia el correo de
+  recuperacion con ese mismo codigo.
 - **Resultado esperado:** 200 `"Si el correo existe, se envio un codigo de recuperacion"`, una
   sola fila en `email_otps` y el correo de recuperacion enviado con ese codigo.
 
 ### FORGOT-P02 — Correo desconocido
 
+- **Descripcion:** un correo desconocido responde igual que uno valido, sin crear codigo
+  ni enviar correo — la base de la comparacion con **FORGOT-N01**.
 - **Resultado esperado:** 200 con el mismo mensaje y **sin** enviar correo ni crear codigos.
 
 ### RESET-P01 — Restablecimiento con el codigo correcto
 
+- **Descripcion:** el caso normal: verifica el efecto completo del restablecimiento, que
+  borra los codigos, revoca las sesiones y deja el codigo usado inservible.
 - **Precondiciones:** codigo vigente obtenido con `forgot-password` y una sesion abierta.
 - **Resultado esperado:** 200 `"Contrasena actualizada"`. Se borran todos los codigos del
   usuario, se revocan sus sesiones y la nueva contrasena permite iniciar sesion. Reutilizar el
@@ -49,21 +57,28 @@ usuario; el codigo de recuperacion comparte tabla y reglas con el de verificacio
 
 ### CHPWD-N01 — Contrasena actual incorrecta o repetida
 
+- **Descripcion:** cubre las dos formas de rechazar el cambio: contrasena actual
+  equivocada y nueva igual a la anterior.
 - **Resultado esperado:** 400 `"La contrasena actual es incorrecta"` y, en el otro caso, 400
   `"La nueva contrasena no puede ser igual a la anterior"`. La contrasena no cambia.
 
 ### CHPWD-N02 — Cuerpo invalido
 
+- **Descripcion:** valida el minimo de ocho caracteres en la nueva contrasena y que
+  `currentPassword` tambien sea obligatorio.
 - **Request:** actual vacia y nueva de cinco caracteres.
 - **Resultado esperado:** 400 con `details` para `currentPassword` y `newPassword`.
 
 ### RESET-N02 — Cuenta desactivada o correo desconocido
 
+- **Descripcion:** distingue la cuenta desactivada, que responde 409, del correo
+  desconocido, que responde 400 generico.
 - **Resultado esperado:** 409 `"La cuenta no esta habilitada"` para la cuenta inactiva; 400
   generico `"Codigo invalido o expirado"` para el correo que no existe.
 
 ### RESET-N03 — Codigo caducado
 
+- **Descripcion:** un codigo vencido se rechaza aunque el valor enviado sea el correcto.
 - **Resultado esperado:** 400 aunque el codigo enviado sea el correcto.
 
 ### FORGOT-N01 — (HALLAZGO SEC-05) Cuenta existente sin verificar
@@ -86,6 +101,8 @@ usuario; el codigo de recuperacion comparte tabla y reglas con el de verificacio
 
 ### RESET-S02 — (HALLAZGO SEC-06) Sin limite en la recuperacion
 
+- **Descripcion:** sin limite de peticiones, un tercero puede invalidar repetidamente el
+  codigo que la victima acaba de recibir.
 - **Request:** ocho llamadas seguidas a `forgot-password`.
 - **Resultado esperado (hoy):** ocho correos, ningun 429, y solo el ultimo codigo sirve: un
   tercero puede anular indefinidamente el enlace que la victima acaba de recibir.
@@ -95,6 +112,8 @@ usuario; el codigo de recuperacion comparte tabla y reglas con el de verificacio
 
 ### RESET-E01 — Un restablecimiento fallido no deja datos a medias
 
+- **Descripcion:** un restablecimiento fallido no deja efectos a medias: ni el hash
+  cambia ni el codigo se consume.
 - **Request:** restablecimiento con un codigo incorrecto.
 - **Resultado esperado:** 400, el hash de la contrasena intacto y el codigo original todavia
   sin usar.

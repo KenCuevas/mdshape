@@ -8,7 +8,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "predev": "npm run sync:docs",
     "dev": "vite",
+    "prebuild": "npm run sync:docs",
     "build": "vue-tsc --build && vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --build",

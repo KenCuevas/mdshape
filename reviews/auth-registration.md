@@ -44,6 +44,8 @@ maximo (ver SEC-02: ese limite no funciona), guardado en claro en `email_otps`.
 
 ### OTP-P01 — Codigo correcto
 
+- **Descripcion:** el caso normal de verificacion: activa la cuenta, borra todos los
+  codigos y entrega tokens que ya funcionan contra `GET /api/me`.
 - **Precondiciones:** cuenta sin verificar con un codigo vigente.
 - **Request:** `POST /api/auth/verify-otp` con el correo y el codigo.
 - **Resultado esperado:** 200 con `message: "Cuenta verificada correctamente"` y tokens
@@ -60,12 +62,16 @@ maximo (ver SEC-02: ese limite no funciona), guardado en claro en `email_otps`.
 
 ### REG-N01 — Correo o telefono repetidos
 
+- **Descripcion:** cubre el rechazo por correo repetido y por telefono repetido, cada
+  uno con su propio mensaje.
 - **Precondiciones:** una cuenta ya dada de alta.
 - **Resultado esperado:** 400 con `"El email ya esta registrado"` o `"El telefono ya esta
   registrado"`. Sigue habiendo un solo usuario.
 
 ### REG-N02 — Validaciones de formato
 
+- **Descripcion:** valida el formato del telefono dominicano y, por separado, que cada
+  campo vacio o invalido genere su propia entrada en `details`.
 - **Request:** telefono de diez digitos, y despues un cuerpo con todos los campos vacios o
   invalidos.
 - **Resultado esperado:** 400 con `details[0].field = "phoneNumber"` y el mensaje `"Número de
@@ -74,16 +80,22 @@ maximo (ver SEC-02: ese limite no funciona), guardado en claro en `email_otps`.
 
 ### OTP-N03 — Codigo expirado
 
+- **Descripcion:** un codigo caducado se rechaza aunque el valor introducido sea el
+  correcto.
 - **Precondiciones:** codigo con `expires_at` en el pasado.
 - **Resultado esperado:** 400 `"Codigo invalido o expirado"` aunque el codigo sea el correcto.
 
 ### OTP-N04 — Correo desconocido o cuerpo invalido
 
+- **Descripcion:** que el correo desconocido no se distinga de un codigo invalido, y que
+  el cuerpo mal formado siga devolviendo `details` por campo.
 - **Resultado esperado:** 400 con el mismo mensaje generico para un correo que no existe (no
   revela nada) y 400 con `details` por campo cuando el cuerpo no cumple.
 
 ### RESEND-N01 — Reenvio a una cuenta ya verificada
 
+- **Descripcion:** la diferencia entre el 409 de una cuenta verificada y el 400 de un
+  correo inexistente es el propio hallazgo **SEC-05**.
 - **Resultado esperado:** 409 `"La cuenta ya esta verificada"`. Con un correo desconocido, en
   cambio, responde 400 `"No se encontro el usuario"`: esa diferencia permite enumerar cuentas
   (**SEC-05**).
@@ -98,6 +110,8 @@ maximo (ver SEC-02: ese limite no funciona), guardado en claro en `email_otps`.
 
 ### REG-S02 — Limite de altas por IP
 
+- **Descripcion:** comprueba el limite de tres altas por hora por IP y que la cuarta
+  peticion no cree usuario.
 - **Resultado esperado:** las tres primeras altas de una hora responden 201 y la cuarta 429.
   Solo quedan tres usuarios.
 
@@ -121,6 +135,8 @@ maximo (ver SEC-02: ese limite no funciona), guardado en claro en `email_otps`.
 
 ### REG-N03 — (HALLAZGO SEC-03) Consentimiento registrado sin aceptacion
 
+- **Descripcion:** el hallazgo: aunque el usuario rechaza los terminos, la cuenta guarda
+  `consent_at` con fecha, como si los hubiera aceptado.
 - **Request:** alta con `termsAccepted: false` y `privacyAccepted: false`.
 - **Resultado esperado (hoy):** 201; la fila queda con `terms_accepted = false` y a la vez
   `consent_at` con fecha.
@@ -130,12 +146,16 @@ maximo (ver SEC-02: ese limite no funciona), guardado en claro en `email_otps`.
 
 ### REG-P02 — Correo largo (antes REG-E01, hallazgo BUG-01 corregido)
 
+- **Descripcion:** regresion de **BUG-01**: confirma que un correo largo ya no desborda
+  la columna del refresh token tras la migracion `V70`.
 - **Request:** alta con un correo de 57 caracteres.
 - **Resultado esperado:** 201 y una fila en `session_tokens`. Con la columna en `VARCHAR(255)`
   el token de refresco no cabia y el alta respondia 500; la migracion `V70` la pasa a `TEXT`.
 
 ### OTP-P02 — Verificar justo despues del alta (antes OTP-E01, hallazgo BUG-03 corregido)
 
+- **Descripcion:** regresion de **BUG-03**: alta y verificacion en el mismo segundo
+  generan refresh tokens distintos gracias al `jti`.
 - **Request:** alta e, inmediatamente, verificacion con el codigo correcto.
 - **Resultado esperado:** 200, cuenta verificada y dos filas en `session_tokens` con refresh
   tokens distintos. Sin `jti` los dos pares de tokens del mismo segundo eran identicos y

@@ -28,15 +28,19 @@ npm install
 #      ├── coverage-matrix.md
 #      ├── findings.md
 #      └── epics/*.md
-# 2. Copy it into the app (repeat whenever the docs change):
-npm run sync:docs
-
-# 3. Start the dev server and open the printed URL:
+# 2. Start the dev server and open the printed URL:
 npm run dev
 ```
 
+`./reviews` is the single source of truth. `npm run dev` and `npm run build` each run
+`sync:docs` first (as `predev` / `prebuild`), so the copy the bundle reads is regenerated
+from it every time and cannot silently drift. Run `npm run sync:docs` by hand only when you
+change the docs while the dev server is already running.
+
 `sync:docs` copies `./reviews` to `src/content/reviews/` (only `.md` files, the target is
-wiped first). A different source folder can be given as an argument or through the
+wiped first). **That copy is generated output and is git-ignored** — it exists because
+Vite's `import.meta.glob` can only reach files under `src/`. Never edit it: the next sync
+wipes it. A different source folder can be given as an argument or through the
 `DOCS_SOURCE` environment variable:
 
 ```bash
@@ -46,8 +50,8 @@ DOCS_SOURCE=/abs/path/reviews npm run sync:docs
 
 The source files are never modified. Because the Markdown is inlined into the bundle with
 `import.meta.glob(..., { query: '?raw', eager: true })`, the dev server picks up changes
-made under `src/content/reviews/` automatically, but files added to `./reviews` need a new
-`npm run sync:docs`.
+made under `src/content/reviews/` automatically, but changes made to `./reviews` while the
+server is running need a new `npm run sync:docs`.
 
 Until the documentation is synced, the app shows an empty state on every view and logs a
 warning in the browser console.
@@ -67,6 +71,8 @@ warning in the browser console.
 | `npm run format`       | Prettier over the whole project.                                         |
 | `npm run format:check` | Prettier in check mode.                                                  |
 | `npm run sync:docs`    | Copies `./reviews` (or the given path) into `src/content/reviews/`.      |
+
+`dev` and `build` are preceded by `predev` / `prebuild`, which run `sync:docs` for you.
 
 ## Views
 

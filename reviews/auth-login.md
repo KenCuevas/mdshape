@@ -49,6 +49,8 @@ con `LOGIN`/`SUCCESS`.
 
 ### LOGIN-N01 — Contrasena incorrecta
 
+- **Descripcion:** comprueba que una contrasena incorrecta no crea sesion ni fila de historial;
+  los intentos fallidos no se registran (ver `findings.md`).
 - **Precondiciones:** usuario verificado y activo.
 - **Request:** contrasena que no corresponde.
 - **Resultado esperado:** 401 con `status: FAILURE` y `message: "Credenciales invalidas"`, sin
@@ -63,6 +65,8 @@ con `LOGIN`/`SUCCESS`.
 
 ### LOGIN-N03 — Cuenta sin verificar o desactivada
 
+- **Descripcion:** comprueba los mensajes de cuenta sin verificar y cuenta desactivada, que
+  solo aparecen tras acertar la contrasena para no permitir enumerar cuentas.
 - **Precondiciones:** un usuario sin verificar y otro verificado pero inactivo.
 - **Request:** inicio de sesion con la contrasena correcta.
 - **Resultado esperado:** 401 con `"La cuenta no ha sido verificada"` y `"La cuenta esta
@@ -71,6 +75,8 @@ con `LOGIN`/`SUCCESS`.
 
 ### LOGIN-N04 — Cuerpo invalido
 
+- **Descripcion:** valida el formato del cuerpo de la peticion, con un `details` por campo y
+  sin escribir nada en base de datos.
 - **Request:** `{"email": "no-es-un-email", "password": ""}` y tambien `{}`.
 - **Resultado esperado:** 400 con `message: "Solicitud invalida"` y `details` con una entrada
   por campo (`email`, `password`). Nada escrito en base de datos.
@@ -103,6 +109,8 @@ con `LOGIN`/`SUCCESS`.
 
 ### LOGIN-S03 — Normalizacion de la huella de dispositivo
 
+- **Descripcion:** una huella hexadecimal valida se guarda en minusculas; una que no lo es se
+  sustituye por un hash.
 - **Request:** `X-Device-Fingerprint: ABCDEF0123456789` en un usuario y `zz-no-hex` en otro.
 - **Resultado esperado:** en el primero se guarda en minusculas tal cual; en el segundo, un
   hash de 64 caracteres hexadecimales.
@@ -117,6 +125,8 @@ con `LOGIN`/`SUCCESS`.
 
 ### LOGIN-E02 — Tipo de contenido no soportado
 
+- **Descripcion:** un `Content-Type` no soportado deberia dar 415 y hoy da 500 (**BUG-05**),
+  sin filtrar detalles internos.
 - **Request:** `Content-Type: text/plain` con `email=a&password=b`.
 - **Resultado esperado:** deberia ser 415, hoy es 500 (**BUG-05**), y de nuevo sin filtrar
   detalles internos.
